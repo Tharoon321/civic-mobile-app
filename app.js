@@ -1,4 +1,5 @@
 // CivicReport PWA JavaScript
+const API_BASE_URL= 'https://civic-reports-api-production.up.railway.app/api';
 class CivicReportApp {
     constructor() {
         this.currentScreen = 'homeScreen';
