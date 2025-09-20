@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicReport - Report Issues in Your City</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#4ECDC4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="CivicReport">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <h1 class="app-title">CivicReport</h1>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="window.civicApp?.showToast('Search feature coming soon!')">🔍</button>
+                <button class="icon-btn notification-btn" onclick="window.civicApp?.showModal('notificationModal')">
+                    🔔
+                    <span class="notification-badge">2</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Screen -->
+        <section id="homeScreen" class="screen active">
+            <div class="welcome-section">
+                <div class="welcome-card">
+                    <h2>Welcome back, John! 👋</h2>
+                    <p>Help make your city better by reporting issues</p>
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <span class="stat-number">8</span>
+                            <span class="stat-label">Reports</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">6</span>
+                            <span class="stat-label">Resolved</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h3>Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="action-btn primary-action" onclick="window.civicApp?.switchScreen('reportScreen')">
+                        📸 Report Issue
+                    </button>
+                    <button class="action-btn secondary-action" onclick="window.civicApp?.showEmergencyContacts()">
+                        🚨 Emergency
+                    </button>
+                </div>
+            </div>
+
+            <div class="recent-reports">
+                <div class="section-header">
+                    <h3>Recent Reports</h3>
+                    <button class="view-all-btn" onclick="window.civicApp?.switchScreen('reportsScreen')">View All</button>
+                </div>
+                <div class="reports-preview">
+                    <div class="report-card preview">
+                        <div class="report-status status-progress">In Progress</div>
+                        <h4>Broken streetlight on Main Street</h4>
+                        <p class="report-location">📍 Main Street & 5th Avenue</p>
+                        <div class="report-meta">
+                            <span class="report-category">💡 Street Lighting</span>
+                            <span class="report-date">Sep 18</span>
+                        </div>
+                    </div>
+                    <div class="report-card preview">
+                        <div class="report-status status-pending">Pending</div>
+                        <h4>Blocked storm drain</h4>
+                        <p class="report-location">📍 Oak Street corner</p>
+                        <div class="report-meta">
+                            <span class="report-category">💧 Water & Sanitation</span>
+                            <span class="report-date">Sep 19</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="emergency-contacts">
+                <h3>Emergency Contacts</h3>
+                <div class="contact-grid">
+                    <a href="tel:911" class="contact-item emergency">
+                        <span class="contact-icon">🚔</span>
+                        <span class="contact-label">Police</span>
+                        <span class="contact-number">911</span>
+                    </a>
+                    <a href="tel:911" class="contact-item emergency">
+                        <span class="contact-icon">🚒</span>
+                        <span class="contact-label">Fire Dept</span>
+                        <span class="contact-number">911</span>
+                    </a>
+                    <a href="tel:5550100" class="contact-item">
+                        <span class="contact-icon">🏛️</span>
+                        <span class="contact-label">City Hall</span>
+                        <span class="contact-number">555-0100</span>
+                    </a>
+                    <a href="tel:5550200" class="contact-item">
+                        <span class="contact-icon">🔧</span>
+                        <span class="contact-label">Public Works</span>
+                        <span class="contact-number">555-0200</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Report Issue Screen -->
+        <section id="reportScreen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="window.civicApp?.switchScreen('homeScreen')">← Back</button>
+                <h2>Report Issue</h2>
+            </div>
+
+            <form id="reportForm" class="report-form">
+                <div class="form-step active" id="step1">
+                    <h3>📸 Add Photo</h3>
+                    <div class="photo-upload">
+                        <input type="file" id="photoInput" accept="image/*" capture="environment" hidden>
+                        <div class="photo-placeholder" id="photoPlaceholder" onclick="document.getElementById('photoInput').click()">
+                            <span class="upload-icon">📷</span>
+                            <p>Tap to take photo or select from gallery</p>
+                        </div>
+                        <div class="photo-preview" id="photoPreview" style="display: none;">
+                            <img id="previewImage" alt="Preview">
+                            <button type="button" class="remove-photo" onclick="window.civicApp?.removePhoto()">×</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn--primary btn--full-width" onclick="window.civicApp?.nextStep()">Next</button>
+                </div>
+
+                <div class="form-step" id="step2">
+                    <h3>🏷️ Choose Category</h3>
+                    <div class="category-grid">
+                        <button type="button" class="category-item" onclick="window.civicApp?.selectCategory('Roads & Transport', this)">
+                            <span class="category-icon">🚗</span>
+                            <span class="category-name">Roads & Transport</span>
+                        </button>
+                        <button type="button" class="category-item" onclick="window.civicApp?.selectCategory('Water & Sanitation', this)">
+                            <span class="category-icon">💧</span>
+                            <span class="category-name">Water & Sanitation</span>
+                        </button>
+                        <button type="button" class="category-item" onclick="window.civicApp?.selectCategory('Street Lighting', this)">
+                            <span class="category-icon">💡</span>
+                            <span class="category-name">Street Lighting</span>
+                        </button>
+                        <button type="button" class="category-item" onclick="window.civicApp?.selectCategory('Waste Management', this)">
+                            <span class="category-icon">🗑️</span>
+                            <span class="category-name">Waste Management</span>
+                        </button>
+                        <button type="button" class="category-item" onclick="window.civicApp?.selectCategory('Parks & Recreation', this)">
+                            <span class="category-icon">🌳</span>
+                            <span class="category-name">Parks & Recreation</span>
+                        </button>
+                        <button type="button" class="category-item" onclick="window.civicApp?.selectCategory('Public Safety', this)">
+                            <span class="category-icon">🚨</span>
+                            <span class="category-name">Public Safety</span>
+                        </button>
+                        <button type="button" class="category-item" onclick="window.civicApp?.selectCategory('Electricity', this)">
+                            <span class="category-icon">⚡</span>
+                            <span class="category-name">Electricity</span>
+                        </button>
+                        <button type="button" class="category-item" onclick="window.civicApp?.selectCategory('Building & Construction', this)">
+                            <span class="category-icon">🏗️</span>
+                            <span class="category-name">Building & Construction</span>
+                        </button>
+                    </div>
+                    <div class="step-actions">
+                        <button type="button" class="btn btn--outline" onclick="window.civicApp?.prevStep()">Back</button>
+                        <button type="button" class="btn btn--primary" id="nextStep2" disabled onclick="window.civicApp?.nextStep()">Next</button>
+                    </div>
+                </div>
+
+                <div class="form-step" id="step3">
+                    <h3>📍 Location & Details</h3>
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-control" id="locationInput" placeholder="Enter location or use current location">
+                        <button type="button" class="location-btn" onclick="window.civicApp?.getCurrentLocation()">📍 Use Current Location</button>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" id="descriptionInput" rows="4" placeholder="Describe the issue in detail..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Priority</label>
+                        <select class="form-control" id="prioritySelect">
+                            <option value="Low">Low Priority</option>
+                            <option value="Medium" selected>Medium Priority</option>
+                            <option value="High">High Priority</option>
+                        </select>
+                    </div>
+                    <div class="step-actions">
+                        <button type="button" class="btn btn--outline" onclick="window.civicApp?.prevStep()">Back</button>
+                        <button type="submit" class="btn btn--primary" onclick="window.civicApp?.submitReport(event)">Submit Report</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <!-- My Reports Screen -->
+        <section id="reportsScreen" class="screen">
+            <div class="screen-header">
+                <h2>My Reports</h2>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="window.civicApp?.filterReports('all', this)">All</button>
+                    <button class="filter-tab" onclick="window.civicApp?.filterReports('pending', this)">Pending</button>
+                    <button class="filter-tab" onclick="window.civicApp?.filterReports('progress', this)">In Progress</button>
+                    <button class="filter-tab" onclick="window.civicApp?.filterReports('resolved', this)">Resolved</button>
+                </div>
+            </div>
+            <div class="reports-list" id="reportsList">
+                <!-- Reports will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Map Screen -->
+        <section id="mapScreen" class="screen">
+            <div class="screen-header">
+                <h2>Area Map</h2>
+                <button class="filter-btn" onclick="window.civicApp?.showToast('Map filters coming soon!')">🔽 Filters</button>
+            </div>
+            <div class="map-container">
+                <div class="map-placeholder">
+                    <h3>🗺️ Interactive Map</h3>
+                    <p>Showing reported issues in your area</p>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="marker pending">📍</span>
+                            <span>Pending Issues</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="marker progress">📍</span>
+                            <span>In Progress</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="marker resolved">📍</span>
+                            <span>Resolved</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nearby-issues">
+                <h3>Nearby Issues</h3>
+                <div class="issues-list" id="nearbyIssuesList">
+                    <!-- Nearby issues will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Screen -->
+        <section id="profileScreen" class="screen">
+            <div class="profile-header">
+                <div class="profile-avatar">👤</div>
+                <h2>John Citizen</h2>
+                <p>john@example.com</p>
+            </div>
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">Total Reports</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">Resolved</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">75%</span>
+                    <span class="stat-label">Success Rate</span>
+                </div>
+            </div>
+            <div class="profile-menu">
+                <button class="menu-item" onclick="window.civicApp?.showToast('Notifications settings coming soon!')">📱 Notifications Settings</button>
+                <button class="menu-item" onclick="window.civicApp?.showToast('Language settings coming soon!')">🌍 Language & Region</button>
+                <button class="menu-item" onclick="window.civicApp?.showToast('Help & support coming soon!')">❓ Help & Support</button>
+                <button class="menu-item" onclick="window.civicApp?.showToast('Terms & privacy coming soon!')">📋 Terms & Privacy</button>
+                <button class="menu-item logout" onclick="window.civicApp?.handleLogout()">🚪 Sign Out</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="window.civicApp?.switchScreen('homeScreen')">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-item" onclick="window.civicApp?.switchScreen('reportScreen')">
+            <span class="nav-icon">📝</span>
+            <span class="nav-label">Report</span>
+        </button>
+        <button class="nav-item" onclick="window.civicApp?.switchScreen('reportsScreen')">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">My Reports</span>
+        </button>
+        <button class="nav-item" onclick="window.civicApp?.switchScreen('mapScreen')">
+            <span class="nav-icon">🗺️</span>
+            <span class="nav-label">Map</span>
+        </button>
+        <button class="nav-item" onclick="window.civicApp?.switchScreen('profileScreen')">
+            <span class="nav-icon">👤</span>
+            <span class="nav-label">Profile</span>
+        </button>
+    </nav>
+
+    <!-- Modals -->
+    <div class="modal" id="notificationModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Notifications</h3>
+                <button class="close-btn" onclick="window.civicApp?.hideModal('notificationModal')">×</button>
+            </div>
+            <div class="notifications-list">
+                <div class="notification-item">
+                    <div class="notification-icon update">📄</div>
+                    <div class="notification-content">
+                        <h4>Report Update</h4>
+                        <p>Your streetlight report has been assigned to Public Works</p>
+                        <span class="notification-time">2 hours ago</span>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon resolved">✅</div>
+                    <div class="notification-content">
+                        <h4>Issue Resolved</h4>
+                        <p>Park bench graffiti has been cleaned</p>
+                        <span class="notification-time">1 day ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="successModal" style="display: none;">
+        <div class="modal-content success">
+            <div class="success-animation">✅</div>
+            <h3>Report Submitted!</h3>
+            <p>Your report has been successfully submitted. You'll receive updates on its progress.</p>
+            <button class="btn btn--primary" onclick="window.civicApp?.hideModal('successModal'); window.civicApp?.switchScreen('reportsScreen');">View My Reports</button>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Submitting your report...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
